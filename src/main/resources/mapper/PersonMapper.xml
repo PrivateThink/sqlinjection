@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zengfeng.dao.PersonMapper" >
+  <resultMap id="BaseResultMap" type="com.zengfeng.domain.Person" >
+    <id column="Fid" property="id" jdbcType="INTEGER" />
+    <result column="Fname" property="name" jdbcType="VARCHAR" />
+    <result column="Fpass_word" property="passWord" jdbcType="VARCHAR" />
+    <result column="Fsex" property="sex" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    Fid, Fname, Fpass_word, Fsex
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.zengfeng.domain.PersonExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_person
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_person
+    where Fid = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_person
+    where Fid = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zengfeng.domain.PersonExample" >
+    delete from t_person
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zengfeng.domain.Person" >
+    insert into t_person (Fid, Fname, Fpass_word, 
+      Fsex)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{passWord,jdbcType=VARCHAR}, 
+      #{sex,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zengfeng.domain.Person" >
+    insert into t_person
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        Fid,
+      </if>
+      <if test="name != null" >
+        Fname,
+      </if>
+      <if test="passWord != null" >
+        Fpass_word,
+      </if>
+      <if test="sex != null" >
+        Fsex,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="passWord != null" >
+        #{passWord,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zengfeng.domain.PersonExample" resultType="java.lang.Integer" >
+    select count(*) from t_person
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_person
+    <set >
+      <if test="record.id != null" >
+        Fid = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.name != null" >
+        Fname = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.passWord != null" >
+        Fpass_word = #{record.passWord,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sex != null" >
+        Fsex = #{record.sex,jdbcType=TINYINT},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_person
+    set Fid = #{record.id,jdbcType=INTEGER},
+      Fname = #{record.name,jdbcType=VARCHAR},
+      Fpass_word = #{record.passWord,jdbcType=VARCHAR},
+      Fsex = #{record.sex,jdbcType=TINYINT}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zengfeng.domain.Person" >
+    update t_person
+    <set >
+      <if test="name != null" >
+        Fname = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="passWord != null" >
+        Fpass_word = #{passWord,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        Fsex = #{sex,jdbcType=TINYINT},
+      </if>
+    </set>
+    where Fid = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zengfeng.domain.Person" >
+    update t_person
+    set Fname = #{name,jdbcType=VARCHAR},
+      Fpass_word = #{passWord,jdbcType=VARCHAR},
+      Fsex = #{sex,jdbcType=TINYINT}
+    where Fid = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByName" parameterType="java.lang.String" resultMap="BaseResultMap" >
+    SELECT * FROM  t_person where Fname ='${name}'
+  </select>
+</mapper>
